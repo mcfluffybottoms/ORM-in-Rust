@@ -1,0 +1,10 @@
+[package]
+name = "orm"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+orm-macro = { path = "./orm-macro" }
+postgres = "0.19.14"
+thiserror = "1.0.37"
+
