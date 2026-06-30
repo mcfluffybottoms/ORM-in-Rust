@@ -15,7 +15,7 @@ pub enum Error {
     #[error(transparent)]
     UnexpectedType(Box<UnexpectedTypeError>),
     #[error(transparent)]
-    MissingColumn(Box<MissingColumnError>),
+    ColumnNotFound(Box<ColumnNotFoundError>),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
@@ -49,7 +49,7 @@ pub struct UnexpectedTypeError {
 
 #[derive(Error, Debug)]
 #[error("Missing column `{column_name}` in table `{table_name}` for `{type_name}::{attr_name}`")]
-pub struct MissingColumnError {
+pub struct ColumnNotFoundError {
     pub table_name: &'static str,
     pub column_name: &'static str,
     pub attr_name: &'static str,

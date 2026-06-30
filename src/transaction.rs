@@ -48,7 +48,7 @@ impl<'a> Transaction<'a> {
         let columns = self.inner.load_columns(schema)?;
         for field in schema.fields {
             if !columns.contains(&field.column_name.to_string()) {
-                return Err(Error::MissingColumn(Box::new(MissingColumnError {
+                return Err(Error::ColumnNotFound(Box::new(ColumnNotFoundError {
                     type_name: get_type_name::<T>(),
                     table_name: schema.name,
                     attr_name: field.name,
@@ -115,7 +115,7 @@ impl<'a> Transaction<'a> {
         let columns = self.inner.load_columns(schema)?;
         for field in schema.fields {
             if !columns.contains(&field.column_name.to_string()) {
-                return Err(Error::MissingColumn(Box::new(MissingColumnError {
+                return Err(Error::ColumnNotFound(Box::new(ColumnNotFoundError {
                     type_name: get_type_name::<T>(),
                     table_name: schema.name,
                     attr_name: field.name,
@@ -139,7 +139,7 @@ impl<'a> Transaction<'a> {
         })
     }
 
-    pub fn commit(&mut self) -> Result<()> {
+    pub fn commit(mut self) -> Result<()> {
         for (type_id, id) in self.dirty_objects.borrow().iter() {
             if let Some(store_rc) = self.storeobjects.borrow().get(&(*type_id, *id)) {
                 let store_ref = &(**store_rc).borrow();
@@ -166,8 +166,10 @@ impl<'a> Transaction<'a> {
         Ok(())
     }
 
-    pub fn rollback(&mut self) -> Result<()> {
+    pub fn rollback(mut self) -> Result<()> {
         self.inner.rollback()?;
+        self.removed_objects.borrow_mut().clear();
+        self.dirty_objects.borrow_mut().clear();
         Ok(())
     }
 

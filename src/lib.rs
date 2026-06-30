@@ -1,19 +1,19 @@
-#![forbid(unsafe_code)]
-
+// import modules
 mod utils;
-
-mod connection;
-mod error;
 mod transaction;
+mod error;
 
+// import types
 pub mod data;
-pub mod object;
 pub mod storage;
+pub mod object;
 
-pub use connection::Connection;
-pub use data::ObjectId;
+// aliases for types
+pub use storage::Connection;
+pub use transaction::{ObjectState, Transaction, Tx};
 pub use error::{Result, Error};
 pub use object::Object;
-pub use transaction::{ObjectState, Transaction, Tx};
+pub use data::ObjectId;
 
+// macros
 pub use orm_macro::Object;

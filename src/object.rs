@@ -1,7 +1,4 @@
-use crate::{
-    data::DataType,
-    storage::{Row, RowSlice},
-};
+use crate::data::{DataType, Value};
 
 use std::any::Any;
 
@@ -45,6 +42,9 @@ pub struct Field {
     pub column_name: &'static str,
     pub field_type: DataType,
 }
+
+pub type Row<'a> = Vec<Value<'a>>;
+pub type RowSlice<'a> = [Value<'a>];
 
 pub struct Schema {
     pub name: &'static str,
